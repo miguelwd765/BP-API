@@ -27,6 +27,11 @@ getCategoryIds("use1", "mpachecotest")
 def updateProducts(server, account):
     # user Inputs
     userCategory = input("Using the above ^^^ type in the ID of the CATEGORY you want to assign products to: ")
+    body = {
+        "reporting": {
+        "subcategoryId": userCategory
+		}
+    }
     userProducts = input("Which products do you want to assign to this category?")
     # build out URI
     url = "https://%s.brightpearlconnect.com/public-api/%s/product-service/product/%s" % (server, account, userProducts)
@@ -37,7 +42,7 @@ def updateProducts(server, account):
         "brightpearl-account-token": creds.api_key
     }
     
-    response = requests.get(url=url, headers=headers).json()
-    print(response["response"][0])
+    response = requests.put(url=url, headers=headers, json=body)
+    print(response)
     
 updateProducts("use1", "mpachecotest")
