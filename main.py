@@ -21,16 +21,17 @@ def getCategoryIds(server, account):
     #print all category names and ids to user
     data = response.get("response")
     
+    catParents = {}
+    
     for d in data:
+        catParent = d.get("parentId", 0)
         catId = d["id"]
         catName = d["name"]
+        catParents[catId] = catParent
         print(f"The category ID for {catName} is {catId}")
+        
+    print(catParents)
     
-getCategoryIds("use1", "mpachecotest")
-
-# function to run PUT request based on user input
-
-def updateProducts(server, account):
     # user Inputs
     
     userCategory = input("Using the above ^^^ type in the ID of the CATEGORY you want to assign products to: ")
@@ -59,4 +60,4 @@ def updateProducts(server, account):
     else:
         print(f"Something went wrong {response}")
     
-updateProducts("use1", "mpachecotest")
+getCategoryIds("use1", "mpachecotest")
