@@ -20,14 +20,14 @@ def getCategoryIds(server, account):
     response = requests.get(url=url, headers=headers).json()
 
     # print all category names and ids to user
-    data = response.get("response")
+    res = response.get("response")
 
     catParents = {}
 
-    for d in data:
-        catParent = d.get("parentId", 0)
-        catId = d["id"]
-        catName = d["name"]
+    for r in res:
+        catParent = r.get("parentId", 0)
+        catId = r["id"]
+        catName = r["name"]
         catParents[catId] = catParent
         print(f"The category ID for {catName} is {catId}")
 
@@ -36,18 +36,18 @@ def getCategoryIds(server, account):
     userCategory = int(input(
         "Using the above ^^^ type in the ID of the CATEGORY you want to assign products to: "))
 
-    # store parent category based off user input in dictionary to use for body2
+    # store parent category based off user input in dictionary to use for data2
 
     userCatParent = int(catParents.get(userCategory, None))
 
     # body for update without parent category
-    body = {
+    data = {
         "reporting": {
             "subcategoryId": userCategory
         }
     }
     # body for update with a category
-    data = {
+    data2 = {
         "reporting": {
             "categoryId": userCatParent,
             "subcategoryId": userCategory
@@ -77,11 +77,9 @@ def getCategoryIds(server, account):
         # complete PUT request and prints out message to user
         # check if user input category has a parent category
         if userCatParent == 0:
-            response = requests.put(url=url, headers=headers, json=body)
-            # print("Request body:", json.dumps(body, indent=2))
-        elif userCatParent != 0:
-            # print("Request body:", json.dumps(data, indent=2))
             response = requests.put(url=url, headers=headers, json=data)
+        elif userCatParent != 0:
+            response = requests.put(url=url, headers=headers, json=data2)
         else:
             print("Something went wrong!!")
 
@@ -89,7 +87,7 @@ def getCategoryIds(server, account):
 
         # print("Request URL:", url)
         # print("Request Headers:", headers)
-        # print("Request Body:", json.dumps(data, indent=2))
+        # print("Request Body:", json.dumps(data2, indent=2))
 
         # print sucess message. error if not a 200
         response = response.status_code
